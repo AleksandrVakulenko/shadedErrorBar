@@ -16,5 +16,6 @@ disp(['Elapsed time: ' num2str(Time_s, '%0.2f') ' s'])
 % NOTE: old version:
 % Elapsed time: 3.18 s
 
-
+% NOTE: new version (cdaf89b+):
+% Elapsed time: 0.61 s
 
