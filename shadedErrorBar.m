@@ -77,7 +77,10 @@ function varargout=shadedErrorBar(x,y,errBar,varargin)
 %
 % Rob Campbell - November 2009
 
-
+persistent thisIsMatlab
+if isempty(thisIsMatlab)
+    thisIsMatlab = sum( size(ver('MATLAB'))) > 0;
+end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -87,7 +90,7 @@ narginchk(3,inf)
 params = inputParser;
 params.CaseSensitive = false;
 params.addParameter('lineProps', '-k', @(x) ischar(x) | iscell(x));
-if (sum( size(ver('MATLAB'))) > 0  )
+if thisIsMatlab
   params.addParameter('transparent', true, @(x) islogical(x) || x==0 || x==1);
 elseif (sum( size(ver('Octave'))) > 0  )
   params.addParameter('transparent', false, @(x) islogical(x) || x==0 || x==1);
@@ -118,7 +121,7 @@ end
 
 if isempty(x)
     x=1:length(y);
-elseif sum( size(ver('MATLAB'))) > 0 
+elseif thisIsMatlab
     x=x(:).';
 end
 
@@ -137,7 +140,7 @@ end
 % Check for correct x, errbar formats
 x_size = size(x);
 
-if (length(x) ~= length(errBar) && sum( size(ver('MATLAB'))) > 0 )
+if (length(x) ~= length(errBar) && thisIsMatlab)
     error('length(x) must equal length(errBar)')
 elseif( ( length(x) ~= length(errBar) && checkOctave_datestr(x) == false ) ...
             && sum( size(ver('Octave'))) > 0  )
@@ -153,7 +156,7 @@ if ~initialHoldStatus
   hold(plotAxes,'on')
 end
 
-H = makePlot(x,y,errBar,lineProps,transparent,patchSaturation,plotAxes);
+H = makePlot(x,y,errBar,lineProps,transparent,patchSaturation,plotAxes,thisIsMatlab);
 
 if ~initialHoldStatus
   hold(plotAxes,'off')
@@ -166,12 +169,12 @@ end
 
 
 
-function H = makePlot(x,y,errBar,lineProps,transparent,patchSaturation,plotAxes)
+function H = makePlot(x,y,errBar,lineProps,transparent,patchSaturation,plotAxes,thisIsMatlab)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % Determine host application
-    if sum( size(ver('MATLAB')) ) > 0
+    if thisIsMatlab
       hostName = 'MATLAB';
     elseif sum( size(ver('Octave')) ) > 0
       hostName = 'Octave';
