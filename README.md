@@ -91,6 +91,9 @@ set(gca,'XTickLabel',[],'YTickLabel',[])
 
 
 # Change Log
+19th October 2026
+Calc speed improved by pull request by [lrfbranco](https://github.com/lrfbranco)
+
 15tth November 2022
 * Allow targing to a specific axis
 
